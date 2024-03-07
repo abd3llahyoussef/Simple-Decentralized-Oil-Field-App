@@ -20,13 +20,6 @@ declare global {
 export default function Home() {
   const [open, setOpen] = useState("0");
   const webSocketProvider = process.env.WEBSOCKET_PROVIDER!;
-  const settings = {
-    apiKey: "u8_uLJJIlQkZqdD_S69kowsov-pFQ_V4",
-    network: Network.ETH_SEPOLIA,
-  };
-  const alchemy = new Alchemy(settings);
-  const nonce = new Utils.Interface(abi);
-  const nonce_abi = nonce.encodeFilterTopics("appData", []);
 
   function getIotData() {
     const web3 = new Web3(
@@ -76,51 +69,6 @@ export default function Home() {
     }
   }
   //use Contract Event
-  async function getIt() {
-    if (typeof window.ethereum != "undefined") {
-      // const provider = new ethers.WebSocketProvider(webSocketProvider);
-      // const signer = await provider.getSigner();
-      // const contract = new ethers.Contract(contractAddress, abi, provider);
-
-      try {
-        // await contract.on("appData", (from, to, _amount, event) => {
-        //   let info = {
-        //     from: from,
-        //     to: to,
-        //     value: _amount,
-        //     data: event,
-        //   };
-        //   console.log(JSON.stringify(info, null, 4));
-        //   console.log(event.log);
-        //   console.log(`${from} => ${to} : ${_amount}`);
-        // });
-        alchemy.ws.on("appData", (blockNumber) => {
-          console.log("alchemy data :", blockNumber);
-        });
-        const logs: any = await alchemy.core.getLogs({
-          fromBlock: "0x0",
-          toBlock: "latest",
-          address: contractAddress,
-          topics: nonce_abi,
-        });
-        console.log("pending transactions", logs);
-        // console.log("data", logs[36].data);
-        // const filter = await contract.filters.appData();
-        // contract.on(filter, (from, to, amount, event) => {
-        //   console.log(
-        //     `Transaction done! From: ${from}, To: ${to}, Amount:${event}`
-        //   );
-        // });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-  // useEffect(() => {
-  //   getIt();
-  // }, []);
-
-  //decrypt Hash Data
 
   //Make A Fund to send Amount of ETH
   async function getData() {
