@@ -25,7 +25,7 @@ export default function Home() {
 
   const web3 = new Web3(
     new Web3.providers.WebsocketProvider(
-      "wss://eth-sepolia.g.alchemy.com/v2/u8_uLJJIlQkZqdD_S69kowsov-pFQ_V4"
+      "wss://eth-sepolia.g.alchemy.com/v2/API_KEY"
     )
   );
   const myContract = new web3.eth.Contract(abi, contractAddress);
