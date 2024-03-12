@@ -18,9 +18,9 @@ declare global {
   }
 }
 export default function Home() {
-  const [open, setOpen] = useState("0");
+  const [open, setOpen] = useState("1");
   const [account, setAccount] = useState<string | null>(null);
-  const [temperature, setTemperature] = useState(0);
+  const [temperature, setTemperature] = useState("0");
   const webSocketKey = process.env.WEBSOCKET_PROVIDER!;
 
   const web3 = new Web3(
@@ -30,35 +30,15 @@ export default function Home() {
   );
   const myContract = new web3.eth.Contract(abi, contractAddress);
   myContract.events.appData({}).on("data", (event) => {
-    console.log(event);
-    console.log(web3.utils.hexToAscii(event.returnValues["0"] as string));
-    console.log(
-      web3.eth.abi.decodeLog(abi, event.raw?.data as string, [
-        event.raw?.topics[0] as string,
-        event.raw?.topics[1] as string,
-      ])
-    );
+    console.log(web3.utils.hexToAscii(event.data));
+    setTemperature(web3.utils.hexToUtf8(event.data).replace(/\D/g, ""));
   });
-  // const provider = new ethers.WebSocketProvider(
-  //   "wss://eth-sepolia.g.alchemy.com/v2/u8_uLJJIlQkZqdD_S69kowsov-pFQ_V4"
-  // );
-  // const contract = new ethers.Contract(contractAddress, abi, provider);
-  // console.log(contract);
-  // contract.on("appData", (event) => {
-  //   // let info = {
-  //   //   from: from,
-  //   //   to: to,
-  //   //   value: ethers.formatUnits(value, 6),
-  //   //   event: event,
-  //   // };
-  //   // console.log(JSON.stringify(info, null, 4));
-  //   console.log(event);
-  //});
-  useEffect(() => {}, [open]);
+
+  useEffect(() => {}, [open, temperature]);
   const handlePump = async () => {
     const pumbBtn: any = document.getElementById("Data button");
 
-    (await open) === "0" ? setOpen("1") : setOpen("0");
+    (await open) === "1" ? setOpen("0") : setOpen("1");
 
     try {
       await getData();
@@ -88,10 +68,7 @@ export default function Home() {
         const connect = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        // connectBtn.innerHTML = "Connected!!!";
-        // const account = await window.ethereum.request({
-        //   method: "eth_accounts",
-        // });
+
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
         const publicAddress = await signer.getAddress();
@@ -150,7 +127,7 @@ export default function Home() {
       <div className="grid grid-cols-1 h-screen place-items-center">
         <div
           id="temp button"
-          className="p-5 font-semibold rounded-full border-2 grid grid-cols-1 h-fit place-items-center text-white bg-gray-600  w-1/6"
+          className="p-5 font-semibold rounded-full border-2 grid grid-cols-1 h-fit place-items-center text-white bg-gray-600  w-auto"
         >
           <Image src={temp} alt="temprature of oil" width="60" height="90" />
           <p className="text-3xl mt-2">{temperature}</p>

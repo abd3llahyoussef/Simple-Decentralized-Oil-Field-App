@@ -4,7 +4,7 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: "string", name: "data", type: "string" },
+      { indexed: false, internalType: "string", name: "data", type: "string" },
     ],
     name: "appData",
     type: "event",
@@ -38,5 +38,4 @@ export const abi = [
     type: "function",
   },
 ];
-
-export const contractAddress = "0x98f1778094d1e92d44b1867a6e0127c982b77c04";
+export const contractAddress = "0xDC3cEeFEFCB9B2c2717590266a185aEB4d2e6Fd0";
