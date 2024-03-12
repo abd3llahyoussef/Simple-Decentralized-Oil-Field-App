@@ -21,11 +21,11 @@ export default function Home() {
   const [open, setOpen] = useState("0");
   const [account, setAccount] = useState<string | null>(null);
   const [temperature, setTemperature] = useState(0);
-  const webSocketKey = process.env.WEBSOCKET_PROVIDER!;
+  
 
   const web3 = new Web3(
     new Web3.providers.WebsocketProvider(
-      "wss://eth-sepolia.g.alchemy.com/v2/API_KEY"
+      
     )
   );
   const myContract = new web3.eth.Contract(abi, contractAddress);
