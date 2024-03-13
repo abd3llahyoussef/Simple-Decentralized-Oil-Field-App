@@ -20,12 +20,17 @@ declare global {
 export default function Home() {
   const [open, setOpen] = useState("1");
   const [account, setAccount] = useState<string | null>(null);
+<<<<<<< HEAD
   const [temperature, setTemperature] = useState("0");
   const webSocketKey = process.env.WEBSOCKET_PROVIDER!;
+=======
+  const [temperature, setTemperature] = useState(0);
+  
+>>>>>>> a590b35b2bf74d209d3cb8bdb4cc4558893fe1b8
 
   const web3 = new Web3(
     new Web3.providers.WebsocketProvider(
-      "wss://eth-sepolia.g.alchemy.com/v2/u8_uLJJIlQkZqdD_S69kowsov-pFQ_V4"
+      
     )
   );
   const myContract = new web3.eth.Contract(abi, contractAddress);
