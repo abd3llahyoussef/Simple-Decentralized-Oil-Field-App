@@ -20,23 +20,25 @@ declare global {
 export default function Home() {
   const [open, setOpen] = useState("1");
   const [account, setAccount] = useState<string | null>(null);
-<<<<<<< HEAD
-  const [temperature, setTemperature] = useState("0");
-  const webSocketKey = process.env.WEBSOCKET_PROVIDER!;
-=======
   const [temperature, setTemperature] = useState(0);
-  
->>>>>>> a590b35b2bf74d209d3cb8bdb4cc4558893fe1b8
 
   const web3 = new Web3(
     new Web3.providers.WebsocketProvider(
-      
+      "wss://eth-sepolia.g.alchemy.com/v2/u8_uLJJIlQkZqdD_S69kowsov-pFQ_V4"
     )
   );
   const myContract = new web3.eth.Contract(abi, contractAddress);
   myContract.events.appData({}).on("data", (event) => {
     console.log(web3.utils.hexToAscii(event.data));
-    setTemperature(web3.utils.hexToUtf8(event.data).replace(/\D/g, ""));
+    const data = Number(
+      web3.utils
+        .hexToUtf8(event.data)
+        .match(/[+-]?\d+(\.\d+)?/g)
+        ?.map((num) => {
+          return parseFloat(num);
+        })
+    );
+    setTemperature(data);
   });
 
   useEffect(() => {}, [open, temperature]);
@@ -46,16 +48,20 @@ export default function Home() {
     (await open) === "1" ? setOpen("0") : setOpen("1");
 
     try {
-      await getData();
-
-      if (open === "0") {
-        pumbBtn.style.backgroundColor = "#808080";
-        toast.success("Turn Pump Off Successfully!", {
-          position: "top-center",
-        });
+      if (await getData()) {
+        if (open === "0") {
+          pumbBtn.style.backgroundColor = "#757575";
+          toast.success("Turn Pump Off Successfully!", {
+            position: "top-center",
+          });
+        } else {
+          pumbBtn.style.backgroundColor = "#3ef83e";
+          toast.success("Turn Pump On Successfully!", {
+            position: "top-right",
+          });
+        }
       } else {
-        pumbBtn.style.backgroundColor = "#3ef83e";
-        toast.success("Turn Pump On Successfully!", {
+        toast.error("Can not connect to the Ethereum network.", {
           position: "top-right",
         });
       }
@@ -91,10 +97,10 @@ export default function Home() {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(contractAddress, abi, signer);
-
       try {
-        const transaction = await contract.storeAppData(open);
+        const transaction = await contract.storeAppData("temp:20.08");
         await Listen(transaction, provider);
+        return true;
       } catch (error) {
         console.log(error);
       }
