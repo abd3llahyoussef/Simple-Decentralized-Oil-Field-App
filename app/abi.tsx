@@ -4,6 +4,12 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
       { indexed: false, internalType: "string", name: "data", type: "string" },
     ],
     name: "appData",
@@ -38,4 +44,4 @@ export const abi = [
     type: "function",
   },
 ];
-export const contractAddress = "0xDC3cEeFEFCB9B2c2717590266a185aEB4d2e6Fd0";
+export const contractAddress = "0xd0ae9F331d306dA48E7119028413771b0F36FdC1";

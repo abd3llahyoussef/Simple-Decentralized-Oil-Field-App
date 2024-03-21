@@ -48,7 +48,7 @@ export default function Home() {
     (await open) === "1" ? setOpen("0") : setOpen("1");
 
     try {
-      if (await getData()) {
+      if (account && (await getData())) {
         if (open === "0") {
           pumbBtn.style.backgroundColor = "#757575";
           toast.success("Turn Pump Off Successfully!", {
@@ -98,7 +98,7 @@ export default function Home() {
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(contractAddress, abi, signer);
       try {
-        const transaction = await contract.storeAppData("temp:20.08");
+        const transaction = await contract.storeAppData(open);
         await Listen(transaction, provider);
         return true;
       } catch (error) {
@@ -123,7 +123,7 @@ export default function Home() {
         <button
           id="connect button"
           onClick={connect}
-          className="mr-10 mt-2 px-2 font-semibold rounded-3xl border-2 text-white bg-gray-600 "
+          className="mr-10 mt-2 px-2 font-semibold rounded-3xl border-2 text-white bg-gray-400 "
         >
           {account ? (
             <div className="ml-auto py-2 px-4">
@@ -138,7 +138,7 @@ export default function Home() {
       <div className="grid grid-cols-1 h-screen place-items-center">
         <div
           id="temp button"
-          className="p-5 font-semibold rounded-full border-2 grid grid-cols-1 h-fit place-items-center text-white bg-gray-600  w-auto"
+          className="p-5 font-semibold rounded-full border-2 grid grid-cols-1 h-fit place-items-center text-white bg-gray-400  w-auto"
         >
           <Image src={temp} alt="temprature of oil" width="60" height="90" />
           <p className="text-3xl mt-2">{temperature}</p>
@@ -147,7 +147,7 @@ export default function Home() {
           <button
             id="Data button"
             onClick={handlePump}
-            className=" w-auto px-2 flex items-center justify-center  font-semibold rounded-full border-2 text-white bg-gray-600 "
+            className=" w-auto px-2 flex items-center justify-center  font-semibold rounded-full border-2 text-white bg-gray-400 "
           >
             <Image src={gasPump} alt="gasPump" width="60" height="90" />
           </button>
